@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Employee List</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Position</th>
+        <th>Department</th>
+        <th>Salary</th>
+      </tr>
+    </thead>
+    <tbody id="employee-table">
+      
+    </tbody>
+  </table>
+
+  <script>
+    // URL API
+    const API_URL = "http://localhost:5000/api/employees";
+
+    // fonction pour recuperer les donnees de l'API
+    async function fetchEmployees() {
+      try {
+        // recupere les donnees de lAPI
+        const response = await fetch(API_URL); 
+        // convertit les donnees en JSON
+        const employees = await response.json(); 
+         // l'affiche des employes
+        displayEmployees(employees);
+      } catch (error) {
+        console.error("Erreur lors du chargement des employés :", error);
+      }
+    }
+
+    // fonction pour afficher les employes dans le tableau
+    function displayEmployees(employees) {
+      const tableBody = document.getElementById("employee-table");
+      // Vide le tableau avant dajouter les nouvelles donnees
+      tableBody.innerHTML = ""; 
+
+      employees.forEach((employee) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${employee.name}</td>
+          <td>${employee.position}</td>
+          <td>${employee.department}</td>
+          <td>$${employee.salary.toLocaleString()}</td>
+        `;
+        // Ajoute la ligne au tableau
+        tableBody.appendChild(row); 
+      });
+    }
+
+    fetchEmployees();
+  </script>
+</body>
+</html>
